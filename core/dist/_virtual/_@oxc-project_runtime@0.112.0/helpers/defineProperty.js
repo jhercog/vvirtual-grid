@@ -1,0 +1,14 @@
+import { toPropertyKey } from "./toPropertyKey.js";
+
+//#region \0@oxc-project+runtime@0.112.0/helpers/defineProperty.js
+function _defineProperty(e, r, t) {
+	return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+		value: t,
+		enumerable: !0,
+		configurable: !0,
+		writable: !0
+	}) : e[r] = t, e;
+}
+
+//#endregion
+export { _defineProperty };

@@ -1,4 +1,29 @@
 {
+  "name": "vvirtual-grid",
+  "version": "1.1.6",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./core/dist/src/index.d.ts",
+      "import": "./core/dist/src/index.js"
+    },
+    "./vue": {
+      "types": "./core/dist/integrations/vue/index.d.ts",
+      "import": "./core/dist/integrations/vue/index.js"
+    },
+    "./nuxt": {
+      "types": "./core/dist/integrations/nuxt/module.d.ts",
+      "import": "./core/dist/integrations/nuxt/module.js"
+    }
+  },
+  "dependencies": {
+    "@vueuse/core": "^14.2.1",
+    "ramda": "^0.32.0",
+    "rxjs": "^7.8.2"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
   "scripts": {
     "format": "oxfmt",
     "prepare": "husky",
@@ -16,7 +41,7 @@
     "oxfmt": "^0.32.0",
     "oxlint": "^1.47.0",
     "oxlint-tsgolint": "^0.14.2",
-    "typescript": "catalog:"
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "*.{js,ts,vue}": "oxfmt --no-error-on-unmatched-pattern"
