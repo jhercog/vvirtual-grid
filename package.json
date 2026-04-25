@@ -16,6 +16,9 @@
       "import": "./core/dist/integrations/nuxt/module.js"
     }
   },
+  "files": [
+    "core/dist"
+  ],
   "dependencies": {
     "@vueuse/core": "^14.2.1",
     "ramda": "^0.32.0",
