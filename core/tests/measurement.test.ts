@@ -51,6 +51,45 @@ describe("getGridMeasurement", () => {
 
     expect(flow).toBe("column");
   });
+
+  // CSS functions like minmax() and fit-content() contain spaces inside parens,
+  // which naive split(" ") treats as extra track delimiters — these cases cover the bug.
+  it("counts a single minmax() column correctly", () => {
+    const el = createGridRoot("4px", "0px", "row", "minmax(0px, 1fr)", "auto");
+    expect(getGridMeasurement(el).columns).toBe(1);
+  });
+
+  it("counts multiple minmax() columns correctly", () => {
+    const el = createGridRoot(
+      "4px",
+      "0px",
+      "row",
+      "minmax(0px, 1fr) minmax(0px, 1fr) 200px",
+      "auto",
+    );
+    expect(getGridMeasurement(el).columns).toBe(3);
+  });
+
+  it("counts fit-content() columns correctly", () => {
+    const el = createGridRoot(
+      "0px",
+      "0px",
+      "row",
+      "fit-content(200px) fit-content(200px)",
+      "auto",
+    );
+    expect(getGridMeasurement(el).columns).toBe(2);
+  });
+
+  it("returns 1 for 'none'", () => {
+    const el = createGridRoot("0px", "0px", "row", "none", "auto");
+    expect(getGridMeasurement(el).columns).toBe(1);
+  });
+
+  it("returns 1 for 'subgrid'", () => {
+    const el = createGridRoot("0px", "0px", "row", "subgrid", "auto");
+    expect(getGridMeasurement(el).columns).toBe(1);
+  });
 });
 
 describe("getResizeMeasurement", () => {

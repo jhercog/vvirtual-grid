@@ -57,6 +57,34 @@ interface GridMeasurement {
   rows: number;
 }
 
+// Counts grid tracks in a computed grid-template-columns/rows value.
+// split(" ") breaks on CSS functions like minmax(0px, 1fr) because the space
+// inside the parens is treated as a track delimiter — this walks depth-aware.
+function countGridTracks(value: string): number {
+  if (!value || value === "none" || value === "subgrid") return 1;
+  let count = 0;
+  let depth = 0;
+  let inToken = false;
+  for (let i = 0; i < value.length; i++) {
+    const ch = value[i];
+    if (ch === "(") {
+      depth++;
+      inToken = true;
+    } else if (ch === ")") {
+      depth--;
+      inToken = true;
+    } else if (ch === " " && depth === 0) {
+      if (inToken) {
+        count++;
+        inToken = false;
+      }
+    } else {
+      inToken = true;
+    }
+  }
+  return (inToken ? count + 1 : count) || 1;
+}
+
 export function getGridMeasurement(rootEl: Element): GridMeasurement {
   const computedStyle = window.getComputedStyle(rootEl);
 
@@ -66,10 +94,10 @@ export function getGridMeasurement(rootEl: Element): GridMeasurement {
     flow: computedStyle.getPropertyValue("grid-auto-flow").startsWith("column")
       ? "column"
       : "row",
-    columns: computedStyle.getPropertyValue("grid-template-columns").split(" ")
-      .length,
-    rows: computedStyle.getPropertyValue("grid-template-rows").split(" ")
-      .length,
+    columns: countGridTracks(
+      computedStyle.getPropertyValue("grid-template-columns"),
+    ),
+    rows: countGridTracks(computedStyle.getPropertyValue("grid-template-rows")),
   };
 }
 
