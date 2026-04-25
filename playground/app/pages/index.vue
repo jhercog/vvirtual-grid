@@ -13,12 +13,13 @@ const scrollMode = ref((route.query.mode as string) || "vertical");
 const scrollBehavior = ref<"smooth" | "auto">(
   (route.query.behavior as "smooth" | "auto") || "smooth",
 );
+const gap = ref(Number(route.query.gap) || 0);
 const scrollToIndex = ref<number | null>(null);
 const currentScrollTo = ref<number | undefined>(undefined);
 
 watch(
-  [totalItems, pageSize, scrollMode, scrollBehavior],
-  ([total, size, mode, behavior]) => {
+  [totalItems, pageSize, scrollMode, scrollBehavior, gap],
+  ([total, size, mode, behavior, g]) => {
     router.replace({
       query: {
         ...route.query,
@@ -26,6 +27,7 @@ watch(
         size: size.toString(),
         mode,
         behavior,
+        gap: g.toString(),
       },
     });
   },
@@ -97,6 +99,13 @@ const handleScrollTo = () => {
         </section>
 
         <section class="control-group">
+          <label class="control-label"
+            >Gap: <span class="mono">{{ gap }}px</span></label
+          >
+          <Slider v-model="gap" :min="0" :max="32" class="control-input" />
+        </section>
+
+        <section class="control-group">
           <label class="control-label">Jump to Index</label>
           <div class="flex-row">
             <InputNumber
@@ -124,6 +133,7 @@ const handleScrollTo = () => {
         :scroll-behavior="scrollBehavior"
         class="grid-instance"
         :class="scrollMode"
+        :style="{ gap: `${gap}px` }"
       >
         <template #probe>
           <ProductItem />
