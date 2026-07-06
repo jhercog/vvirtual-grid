@@ -37,7 +37,6 @@
   "devDependencies": {
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
-    "@platformatic/flame": "^1.6.0",
     "changelogen": "^0.6.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
